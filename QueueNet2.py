@@ -1,17 +1,17 @@
 from Params import *
 import simpy
 import numpy as np
-from SimComponents import PacketGenerator, PacketSink, VOQ, Port
+from SimComponents import PacketGenerator, PacketSink, VOQ, Port,SinkMonitor
 from simpy.resources.resource import Resource
-import random
+import sys
 
 def expArrivals():  # Constant arrival distribution for generator
-    return (mean_pkt_size * 8 / generation_rate)    # in seconds
+    return (mean_pkt_size * 8 / gen_rate)    # in seconds
 
 x = [0]*numOfInputPorts
 for numOfGenerators in range(num_gen):
     x[numOfGenerators] = 1
-
+#sys.stdout = open('simulation_output.txt', 'a')
 env = simpy.Environment()
 
 inputPorts = [None for _ in range(numOfInputPorts)]
@@ -19,7 +19,7 @@ voq = [[None] * numOfVOQsPerPort for _ in range(numOfInputPorts)]
 outputPorts = [Resource(env, capacity=1) for _ in range(numOfOutputPorts)]
 pg = [None for _ in range(numOfInputPorts)]    # list that contains packet generator threads
 ps = PacketSink(env, debug=False, rec_waits=True)
-
+pm = SinkMonitor(env, ps, 1)
 for inputPortID in range(numOfInputPorts):
     inputPorts[inputPortID]= Port(env, port_rate, qlimit_edgeports)
     pg[inputPortID] = PacketGenerator(env, "SJSU1", expArrivals, sdist, x[inputPortID], portID=inputPortID)
@@ -51,9 +51,9 @@ print("\tTotal packets received and dropped across all inputs inputPorts = {}, {
 print("\tTotal packets received and dropped across all VOQs = {}, {}".format(totalPktsRecdAcrossAllVOQs, totalPktsDroppedAcrossAllVOQs))
 print("\tTotal packets received at sink = {}".format(ps.packets_rec))
 print("\tAvg. port to port latency = {}".format(np.mean(ps.waits)))
- 
-print("\tAvg. mean packet size latency = {}".format(mean_pkt_size))
-print("\tAvg. lookup delay  {}".format(55*6.5*10**-9))
-print("\tAvg. end to end delay per packet  {}".format(np.mean(ps.qWaits)))
-print("\tAvg. contention delay per packet  {}".format(np.mean(ps.cWaits)))
-print("\t transmission delay per packet {}".format(mean_pkt_size*8/port_rate))
+print("\tAvg Throughput in bits= {}".format(np.mean(pm.sizes)*8))
+print("\tAvg. contention wait at voq  = {}".format(np.mean(ps.cWaits)))
+print("\tAvg. input buffer wait  = {}".format(np.mean(ps.qWaits)))
+#print(pm.sizes)
+print("----------------------------------------------------------------------------------------------------")
+#print(mean_pkt_size, 55*6.5*10**-9, np.mean(ps.qWaits), np.mean(ps.cWaits), mean_pkt_size*8/port_rate, np.mean(ps.waits))
