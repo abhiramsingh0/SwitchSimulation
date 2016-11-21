@@ -1,0 +1,11 @@
+mean_pkt_size = 128 * 4 # in bytes
+qlimit_edgeports = 1 * (2 ** 20) # in bytes
+qlimit_voq = 1 * (2 ** 20)  # in bytes
+sdist = mean_pkt_size
+sim_time = 2 #(1000 * (10 ** (-6)))
+port_rate = 10 ** 9 # in bits per second
+numOfInputPorts = 16
+numOfOutputPorts = numOfInputPorts
+numOfVOQsPerPort = numOfOutputPorts
+num_gen = numOfInputPorts
+lk_delay = 0.5 * 10**-9
