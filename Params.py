@@ -1,5 +1,5 @@
-mean_pkt_size = 1500# in bytes
-qlimit_edgeports = 1 * (2 ** 20) # in bytes
+mean_pkt_size = 1000# in bytes
+qlimit_edgeports = 20 * (2 ** 20) # in bytes
 qlimit_voq = 1 * (2 ** 20)  # in bytes
 sdist = mean_pkt_size
 sim_time = 5 #(1000 * (10 ** (-6)))

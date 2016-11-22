@@ -1,0 +1,96 @@
+List of parameters:
+	Number of active input inputPorts = 16
+	Input data rate = 10000000000
+	Input avg. packet size = 1500 bytes
+	1st level buffer size = 13981 packets
+	VOQ buffer size = 699 packets
+Results:
+	Total packets  generated = 6668452
+	Total packets received and dropped across all inputs inputPorts = 6668452, 0
+	Total packets received and dropped across all VOQs = 6668450, 0
+	Total packets received at sink = 6668449
+	Avg. port to port latency = 2.9362280021819457e-06
+	Avg Throughput in bits= 16002003000.0
+	Avg. contention wait at voq  = 6.252837008762018e-08
+	Avg. input buffer wait  = 1.3161996320943226e-06
+----------------------------------------------------------------------------------------------------
+List of parameters:
+	Number of active input inputPorts = 16
+	Input data rate = 10000000000
+	Input avg. packet size = 1000 bytes
+	1st level buffer size = 20971 packets
+	VOQ buffer size = 1048 packets
+Results:
+	Total packets  generated = 10005149
+	Total packets received and dropped across all inputs inputPorts = 10005149, 0
+	Total packets received and dropped across all VOQs = 10005146, 0
+	Total packets received at sink = 10005143
+	Avg. port to port latency = 2.0970257943016227e-06
+	Avg Throughput in bits= 16005130000.0
+	Avg. contention wait at voq  = 4.147810831582867e-08
+	Avg. input buffer wait  = 8.980476859858003e-07
+----------------------------------------------------------------------------------------------------
+List of parameters:
+	Number of active input inputPorts = 16
+	Input data rate = 10000000000
+	Input avg. packet size = 500 bytes
+	1st level buffer size = 41943 packets
+	VOQ buffer size = 2097 packets
+Results:
+	Total packets  generated = 20004750
+	Total packets received and dropped across all inputs inputPorts = 20004750, 0
+	Total packets received and dropped across all VOQs = 20004748, 0
+	Total packets received at sink = 20004745
+	Avg. port to port latency = 1.2666316832624893e-06
+	Avg Throughput in bits= 16004910000.0
+	Avg. contention wait at voq  = 2.067443141365793e-08
+	Avg. input buffer wait  = 4.884572518488493e-07
+----------------------------------------------------------------------------------------------------
+List of parameters:
+	Number of active input inputPorts = 16
+	Input data rate = 1000000000
+	Input avg. packet size = 1500 bytes
+	1st level buffer size = 13981 packets
+	VOQ buffer size = 699 packets
+Results:
+	Total packets  generated = 6667579
+	Total packets received and dropped across all inputs inputPorts = 6667579, 0
+	Total packets received and dropped across all VOQs = 6473447, 0
+	Total packets received at sink = 6473196
+	Avg. port to port latency = 0.07273496696189376
+	Avg Throughput in bits= 15535329000.0
+	Avg. contention wait at voq  = 8.463320460263659e-05
+	Avg. input buffer wait  = 0.07263797625729117
+----------------------------------------------------------------------------------------------------
+List of parameters:
+	Number of active input inputPorts = 16
+	Input data rate = 1000000000
+	Input avg. packet size = 1000 bytes
+	1st level buffer size = 20971 packets
+	VOQ buffer size = 1048 packets
+Results:
+	Total packets  generated = 10001070
+	Total packets received and dropped across all inputs inputPorts = 10001070, 93702
+	Total packets received and dropped across all VOQs = 9572096, 0
+	Total packets received at sink = 9571943
+	Avg. port to port latency = 0.10429606831999273
+	Avg Throughput in bits= 15314810000.0
+	Avg. contention wait at voq  = 4.589793477827054e-05
+	Avg. input buffer wait  = 0.10424181288521449
+----------------------------------------------------------------------------------------------------
+List of parameters:
+	Number of active input inputPorts = 16
+	Input data rate = 1000000000
+	Input avg. packet size = 500 bytes
+	1st level buffer size = 41943 packets
+	VOQ buffer size = 2097 packets
+Results:
+	Total packets  generated = 19997399
+	Total packets received and dropped across all inputs inputPorts = 19997399, 967318
+	Total packets received and dropped across all VOQs = 18359063, 0
+	Total packets received at sink = 18358977
+	Avg. port to port latency = 0.14214338189650275
+	Avg Throughput in bits= 14687146000.0
+	Avg. contention wait at voq  = 1.4815833393779862e-05
+	Avg. input buffer wait  = 0.14212420856310887
+----------------------------------------------------------------------------------------------------
