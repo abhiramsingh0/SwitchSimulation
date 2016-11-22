@@ -8,6 +8,7 @@ import simpy
 import random
 from Params import port_rate, numOfVOQsPerPort, numOfOutputPorts, lk_delay
 
+
 class Packet(object):
     """ A very simple class that represents a packet.
         This packet will run through a queue at a switch output port.
@@ -37,6 +38,7 @@ class Packet(object):
         self.portID = portID
         self.contentionDelay = contentionDelay
         self.lookupwait = lookupwait
+        self.frontpackets = 0
 
     def __repr__(self):
         return "time: {}, id: {}, src: {}, dst: {}, size: {}".\
@@ -86,11 +88,12 @@ class PacketGenerator(object):
                 yield self.env.timeout(self.adist())
                 self.packets_sent += 1
 #                 src= random.randrange(0,16,1)
+
                 dst = random.randrange(0,numOfOutputPorts)
 #                 dst=0
 #                p = Packet(self.env.now, self.sdist, self.packets_sent, src=self.id, dst=dst,  flow_id=self.flow_id)
                 p = Packet(self.env.now, self.sdist, self.packets_sent, src=self.id, dst=dst,  flow_id=self.flow_id, portID=self.portID)
-              #  print(p)
+                #print(p)
                 self.bytes_sent+= p.size
                 self.out.put(p)
 
@@ -129,13 +132,14 @@ class PacketSink(object):
         self.action = env.process(self.run())  # starts the run() method as a SimPy process
         self.packets_rec = 0
         self.bytes_rec = 0
+        self.fronpackets = []
 
     def run(self):
         while True:
             msg = yield self.store.get()
             self.packets_rec += 1
             self.bytes_rec += msg.size
-
+            self.fronpackets.append(msg.frontpackets)
             if self.rec_waits:
                 self.waits.append(self.env.now - msg.time)
                 endTime = self.env.now
@@ -261,7 +265,7 @@ class Port(object):
             msg.lookupwait = self.env.now - msg.lookupwait
             self.busy = 1
             self.byte_size -= msg.size
-            yield self.env.timeout(self.lk_delay)
+            yield self.env.timeout(((self.lk_delay)+(msg.size * 8.0 / self.rate)))
             self.outs[msg.dst].put(msg)
             self.busy = 0
             if self.debug:
@@ -274,7 +278,7 @@ class Port(object):
 
         # find loopup delay before inserting packet in input buffer
         #pkt.delay1= (len(self.store.items)+1) * self.lk_delay
-        #print( self.store.items
+        pkt.frontpackets = len(self.store.items)
         #print(pkt.delay1
         #print(pkt
         tmp = self.byte_size + pkt.size

@@ -3,15 +3,18 @@ import simpy
 import numpy as np
 from SimComponents import PacketGenerator, PacketSink, VOQ, Port,SinkMonitor
 from simpy.resources.resource import Resource
+import functools
+import random
+
 import sys
 
 def expArrivals():  # Constant arrival distribution for generator
     return (mean_pkt_size * 8 / gen_rate)    # in seconds
-
+adist = functools.partial(random.expovariate, (gen_rate/(mean_pkt_size*8)))
 x = [0]*numOfInputPorts
 for numOfGenerators in range(num_gen):
     x[numOfGenerators] = 1
-#sys.stdout = open('simulation_output.txt', 'a')
+sys.stdout = open('simulation_output.txt', 'a')
 env = simpy.Environment()
 
 inputPorts = [None for _ in range(numOfInputPorts)]
@@ -22,7 +25,8 @@ ps = PacketSink(env, debug=False, rec_waits=True)
 pm = SinkMonitor(env, ps, 1)
 for inputPortID in range(numOfInputPorts):
     inputPorts[inputPortID]= Port(env, port_rate, qlimit_edgeports)
-    pg[inputPortID] = PacketGenerator(env, "SJSU1", expArrivals, sdist, x[inputPortID], portID=inputPortID)
+    pg[inputPortID] = PacketGenerator(env, "SJSU1", adist, sdist, x[inputPortID], portID=inputPortID)
+    #pg[inputPortID] = PacketGenerator(env, "SJSU1", expArrivals, sdist, x[inputPortID], portID=inputPortID)
     pg[inputPortID].out = inputPorts[inputPortID]
 
     for voqID in range(numOfVOQsPerPort):
@@ -54,6 +58,7 @@ print("\tAvg. port to port latency = {}".format(np.mean(ps.waits)))
 print("\tAvg Throughput in bits= {}".format(np.mean(pm.sizes)*8))
 print("\tAvg. contention wait at voq  = {}".format(np.mean(ps.cWaits)))
 print("\tAvg. input buffer wait  = {}".format(np.mean(ps.qWaits)))
+#print(ps.fronpackets[100])
 #print(pm.sizes)
 print("----------------------------------------------------------------------------------------------------")
 #print(mean_pkt_size, 55*6.5*10**-9, np.mean(ps.qWaits), np.mean(ps.cWaits), mean_pkt_size*8/port_rate, np.mean(ps.waits))
