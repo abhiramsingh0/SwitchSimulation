@@ -11,20 +11,20 @@
 \date{}
 
 \begin{document}
-\title{\textbf{Finding Queuing Delay for Switches}}
-\author{Abhiram Singh, Sidharth Sharma \\Computer Science and Engineering\\ IIT Bombay, Mumbai}
+\title{\textbf{Switch Performance Measurement Simulation}}
+\author{Abhiram Singh, Sidharth Sharma \\CS648, Selected Topics in Network Algorithm \\ Course Project}
 \maketitle
 
 \section{Introduction}
 In current network scenario, end to end packet delay is measured as sum of propagation delay at each hop and processing delay at all intermediate switching devices.
 
-Packet processing delay involves packet transmission delay and the time for which packet waits in the switch Buffer (also known as queuing delay).
-Buffers are provided because of the follwing reasons:
+Packet processing delay involves packet transmission delay and the time for which packet waits in the switch buffer (also known as queuing delay).
+Buffers are provided because of the following reasons:
 \begin{itemize}
 \item To compensate the rate mismatch between transmission devices.
 \item To handle bursty traffic.
 \item To improve the link utilization.
-\item To hold the packet until output port in switch is found.
+\item To hold the packet until table look-up happen.
 \item To hold the packet until destination port becomes free for transmission.
 \end{itemize}
 Buffers in the switch try to solve above mentioned problems but give rise to some other problems.
@@ -33,42 +33,43 @@ Out of mentioned three delays, propagation and transmission delay for a packet i
 However, queuing delay cannot be measured exactly for each packet because of the following reasons:
 \begin{itemize}
 \item Due to bursty traffic flow.
-\item Due to contention at the output port of the switch.
+\item Due to behaviour of other flows is unknown.
 \end{itemize}
-Since queuing delay is the key deciding factor in providing Quality of Service in the network and is also varying parameter, there is need to observe its behaviour.
+Since queuing delay is the key deciding factor in providing Quality of Service in the network. Hence, it is necessary to observe its behaviour.
 
 \section{Problem Description}
-To find the queuing delay and throughput of a given switch on different packet size. 
+To observe the switch performance (throughput and port to port delay) with varying packet sizes. 
 
 \section{Simulation Details}
-For switch simulation, \textit{Simpy} simulator is used and \textit{Python} is used as a programming language.\\
-Swich of 16 ports each of 10Gbps capacity is implemented.\\
-Each packet is defined by the parameters defined the class \textit{Packet}.
+For switch simulation, we used \textit{Simpy} discrete event simulation library in \textit{Python} .\\
+Switch of 16 ports each of 10Gbps capacity is implemented.\\
+Parameters of packets are defined in the class \textit{Packet}.
+
 For traffic generation, \textit{PacketGenerator} class is defined which generates packets according to given packet size and generation rate.
 
-Corresponding to each input port, input buffer is defined. Packet waits in the input buffer until it finds its output port in the switch.
+Corresponding to each input port, input buffer is defined. Packet waits in the input buffer until it finds its output port in the switch based on the look-up.
 \textit{Port} class defines the functionality of input buffer.
 
-For each input buffer, there are associated 16 differnt Virtual Output Queues(VoQ) corresponding to each output port.
-Packets wait in the VoQ's until all the packets in its VoQ are transmitted. 
-This wait depends on how many packets are in front of VoQ and how much contention each packet is experiencing.
-Code for VoQ is defined in the class \textit{SwitchPort}.
+For each input buffer, there are 15 Virtual Output Queues(VoQ) corresponding to each output port.
+Packet stays in the VoQ until the transmission of all the front packets in the VoQ is completed.
+This wait depends on how many packets are in front of VoQ and how much contention each packet is experiencing from the VoQs associated with other input ports.
+Code for VoQ is defined in the class \textit{VOQ}.
 
-To measure switch throughput and delay information of each packet, \textit{PacketSink} class is defined.
+We attach a packet sink with the output ports in which all the packets are collected. This functionality is defined in the class \textit{PacketSink}.
+To measure switch throughput, we defined \textit{SinkMonitor} class which periodically checks packet sink and update the throughput.
 
 \section{Results}
-Packet delay variation is measured by varying packet size. 
-Similarly, switch throughput is also calculated on different packet size.
+We measured the throughput and port to port latency in the switch by varying packet sizes.
  
-Delay vs packet size graph shows that on increasing packet size, port to port delay of switch decreases. 
-The reason is that large number of table lookup is required for small size packets compared to larger size packets. 
+Delay vs packet size graph shows that on increasing packet size, port to port delay of the switch decreases. 
+Reason behind this is more look-ups are required for smaller size packets in contrast to the larger size packets (less number of larger size packets are generated for the same data rate).
 This result is shown in Fig 1.
 
-Since port to port packet delay is less for larger size packets, higher throughput is obtained at higher packet size.
+On increasing average packet size we observed increase in throughput because port to port latency per packet for larger packet size is less.
 This result is shown in Fig 2.
 
 \section{Conclusion}
-Since less delay is obtained at higher packet size, more transmissions must be done at higher packet size.
-Tranmsission at higher packet size also increases switch throughput and also increases link utilization.
-\end{document}
+The actual capacity of the switch varies with the average packet size of the flow. We observed the dependency of throughput and port to port latency of packet on average packet size of the flow.
+Therefore, switch can be utilized in an efficient manner if larger average packet sizes are used in the flows.
 
+\end{document}
