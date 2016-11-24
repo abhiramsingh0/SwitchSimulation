@@ -1,6 +1,10 @@
 \documentclass[twocolumn,10pt]{article}
 \usepackage{geometry}
 \usepackage{mathptmx}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{lastpage}
 \geometry{
  a4paper,
  left = 0.625in,
@@ -8,13 +12,17 @@
  top = 1in,
  bottom = 1in
  }
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{CS648:Selected Topics in Network Algorithms}
+\lhead{A course project report}
+\cfoot{Page \thepage \hspace{1pt} of \pageref{LastPage}}
 \date{}
-
 \begin{document}
-\title{\textbf{Switch Performance Measurement Simulation}}
-\author{Abhiram Singh, Sidharth Sharma \\CS648, Selected Topics in Network Algorithm \\ Course Project}
+\title{\textbf{Switch Simulation for Performance Measurement}}
+\author{Abhiram Singh, Sidharth Sharma\\Course Instructor: Prof. Ashwin Gumaste}
 \maketitle
-
+\thispagestyle{fancy}
 \section{Introduction}
 In current network scenario, end to end packet delay is measured as sum of propagation delay at each hop and processing delay at all intermediate switching devices.
 
@@ -63,10 +71,22 @@ We measured the throughput and port to port latency in the switch by varying pac
  
 Delay vs packet size graph shows that on increasing packet size, port to port delay of the switch decreases. 
 Reason behind this is more look-ups are required for smaller size packets in contrast to the larger size packets (less number of larger size packets are generated for the same data rate).
-This result is shown in Fig 1.
+This result is shown in Figure \ref{Fig 1}.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.95\linewidth]{latency.png}
+\caption{Graph showing decrease in the port to port latency on increasing packet size.}
+\label{Fig 1}
+\end{figure}
 
 On increasing average packet size we observed increase in throughput because port to port latency per packet for larger packet size is less.
-This result is shown in Fig 2.
+This result is shown in Figure \ref{Fig 2}.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.95\linewidth]{throughput.png}
+\caption{Graph showing increase in the switch throughput on increasing packet size.}
+\label{Fig 2}
+\end{figure}
 
 \section{Conclusion}
 The actual capacity of the switch varies with the average packet size of the flow. We observed the dependency of throughput and port to port latency of packet on average packet size of the flow.
